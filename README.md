@@ -1,4 +1,4 @@
-# Vue 3 + TypeScript + Vite
+# Vue 3 + TypeScript + Vite + typescript
 
 ## Vite 创建项目
 
