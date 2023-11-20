@@ -51,7 +51,7 @@ You can also run this command directly using 'npm init @eslint/config'.
 ✔ What format do you want your config file to be in? · JavaScript
 ```
 
-## prettier
+## prettier 需要安装 vscode prettier插件
 
 ---
 
