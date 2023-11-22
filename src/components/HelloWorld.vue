@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 defineProps<{ msg: string }>();
-
+let process = import.meta.env.VITE_APP_BASE_API;
 const count = ref(0);
 </script>
 
@@ -12,7 +12,9 @@ const count = ref(0);
 		<p>
 			Edit
 			<code>components/HelloWorld.vue</code> to test HMR
+			{{ process }}
 		</p>
+		<span></span>
 	</div>
 
 	<p>
