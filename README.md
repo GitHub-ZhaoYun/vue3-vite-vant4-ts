@@ -23,8 +23,8 @@ npm create vite@latest vue3-vant-mobile -- --template vue-ts
 
 > 注意：Vite2 需要 Node.js 版本 >= 12.0.0；Vite3 需要 Node.js 版本 14.18+，16+。
 
-> package.json 添加了 "type": "module" 根目录下的 .js 配置文件一般都是commonjs模
-> 块，需要命名为 .cjs。如：下面会讲到的eslintrc
+> package.json 添加了 "type": "module" 根目录下的 .js 配置文件一般都是commonjs模块，需要命名为
+> .cjs。如：下面会讲到的eslintrc
 
 # 代码规范 (格式化、提示)
 
@@ -152,13 +152,13 @@ module.exports = {
 
 ## Volar
 
-> 使用vscode的小伙伴请注意，vue3项目就不要使用Vetur插件了，它不支持很多vue3特
-> 性，会有很多红线警告。 请使用官方推荐插件Volar，现已更名为Vue Language
-> Features，再搭配TypeScript Vue Plugin
+> 使用vscode的小伙伴请注意，vue3项目就不要使用Vetur插件了，它不支持很多vue3特性，会有很多红线警告。
+> 请使用官方推荐插件Volar，现已更名为Vue Language Features，再搭配TypeScript Vue Plugin
 
 ## Vue VSCode Snippets
 
-> Vue VSCode Snippets 插件旨在为开发者提供最简单快速的生成 Vue 代码片段的方法，通过各种快捷键就可以在 .vue 文件中快速生成各种代码片段。简直是 Vue3 开发必备神器。
+> Vue VSCode Snippets 插件旨在为开发者提供最简单快速的生成 Vue 代码片段的方法，通过各种快捷键就可以
+> 在 .vue 文件中快速生成各种代码片段。简直是 Vue3 开发必备神器。
 
 -   新建一个.vue 文件，输入vbase 会提示生成的模版内容；
 -   输入vfor 快速生成v-for 指令模版；
@@ -168,9 +168,9 @@ module.exports = {
 
 ### 文件 tsconfig.json
 
-> 安装 types/node
-> npm i @types/node -D
-> // @types/node 就是Node.js的类型提示模块，安装之后TS就可以识别Node.js中的API和数据类型了。然后我们需要创建一个 tsconfig.json 文件，用来告诉TS如何编译我们的代码
+> 安装 types/node npm i @types/node -D // @types/node 就是Node.js的类型提示模块，安装之后TS就可以识
+> 别Node.js中的API和数据类型了。然后我们需要创建一个 tsconfig.json 文件，用来告诉TS如何编译我们的代
+> 码
 
 ```
 {
@@ -358,10 +358,9 @@ plugins: [
 
 ## CSS 预处理器
 
-> npm i less -D
-> 创建src/styles文件夹 index.less 全局引入样式 在src/main.ts import '@/styles/index.less';
-> 创建 reset.css 格式化统一样式 详情见项目 在src/main.ts import '@/styles/reset.css
-> 全局使用自定义变量
+> npm i less -D创建src/styles文件夹 index.less 全局引入样式 在src/main.ts import
+> '@/styles/index.less'; 创建 reset.css 格式化统一样式 详情见项目 在src/main.ts import
+> '@/styles/reset.css全局使用自定义变量
 
 ```
 // vite.config.ts
@@ -374,5 +373,52 @@ css: {
     },
   },
 },
+
+```
+
+## 引入 vant
+
+> npm i vant
+
+### 按需引入组件样式
+
+> 通过 npm 安装 npm i @vant/auto-import-resolver unplugin-vue-components -D
+
+### 配置插件
+
+```
+import vue from '@vitejs/plugin-vue';
+import Components from 'unplugin-vue-components/vite';
+import { VantResolver } from '@vant/auto-import-resolver';
+
+export default {
+  plugins: [
+    vue(),
+    Components({
+      resolvers: [VantResolver()],
+    }),
+  ],
+};
+// 配置后可在页面中直接引入vant的组件 无需特殊的导入
+// 会在 components.d.ts文件中自动的写入使用的组件
+// 注意：
+// 1.Vant 中有个别组件是以函数的形式提供的，包括 Toast，Dialog，Notify 和 ImagePreview 组件。在使用函数组件时，unplugin-vue-components 无法解析自动注册组件，导致 @vant/auto-import-resolver 无法解析样式，因此需要手动引入样式。
+// 2.可以在项目的入口文件或公共模块中引入以上组件的样式，这样在业务代码中使用组件时，便不再需要重复引入样式了。
+// 3.请避免同时使用「全量引入」和「按需引入」这两种引入方式，否则会导致代码重复、样式错乱等问题。
+// Toast
+import { showToast } from 'vant';
+import 'vant/es/toast/style';
+
+// Dialog
+import { showDialog } from 'vant';
+import 'vant/es/dialog/style';
+
+// Notify
+import { showNotify } from 'vant';
+import 'vant/es/notify/style';
+
+// ImagePreview
+import { showImagePreview } from 'vant';
+import 'vant/es/image-preview/style';
 
 ```

@@ -2,6 +2,8 @@ import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import path from 'path';
+import Components from 'unplugin-vue-components/vite';
+import { VantResolver } from '@vant/auto-import-resolver';
 const resolve = (dir) => path.resolve(__dirname, dir);
 export default ({ mode }) => {
 	// 获取环境变量
@@ -13,6 +15,9 @@ export default ({ mode }) => {
 			// 默认会向 index.html 注入 .env 文件的内容，类似 vite 的 loadEnv函数
 			// 还可配置entry入口文件， inject自定义注入数据等
 			createHtmlPlugin(),
+			Components({
+				resolvers: [VantResolver()],
+			}),
 		],
 		css: {
 			preprocessorOptions: {
