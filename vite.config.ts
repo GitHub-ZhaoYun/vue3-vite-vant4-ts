@@ -18,9 +18,7 @@ export default ({ mode }) => {
 			preprocessorOptions: {
 				less: {
 					javascriptEnabled: true,
-					additionalData: `@import "${resolve(
-						'src/assets/styles/index.less'
-					)}";`,
+					additionalData: `@import "${resolve('src/assets/styles/index.less')}";`,
 				},
 			},
 		},
@@ -37,7 +35,7 @@ export default ({ mode }) => {
 		},
 		build: {
 			outDir: 'dist', // 指定打包路径，默认为项目根目录下的 dist 目录
-			sourcemap: env.VITE_BUILD_SOURCEMAP === 'true',
+			sourcemap: env.VITE_BUILD_SOURCEMAP === 'true', // 是否产生sourcemap文件
 			// minify默认esbuild，esbuild模式下terserOptions将失效
 			// vite3变化：Terser 现在是一个可选依赖，如果你使用的是 build.minify: 'terser'，你需要手动安装它 `npm add -D terser`
 			minify: 'terser',

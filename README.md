@@ -143,7 +143,10 @@ module.exports = {
     "source.fixAll.eslint": true
   },
   //保存自动格式化
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  //VS Code 将使用制表符·‘↹’进行缩进，而不是4个空格。
+  "editor.insertSpaces": false,
+  "editor.tabSize": 4
 }
 ```
 
@@ -152,3 +155,224 @@ module.exports = {
 > 使用vscode的小伙伴请注意，vue3项目就不要使用Vetur插件了，它不支持很多vue3特
 > 性，会有很多红线警告。 请使用官方推荐插件Volar，现已更名为Vue Language
 > Features，再搭配TypeScript Vue Plugin
+
+## Vue VSCode Snippets
+
+> Vue VSCode Snippets 插件旨在为开发者提供最简单快速的生成 Vue 代码片段的方法，通过各种快捷键就可以在 .vue 文件中快速生成各种代码片段。简直是 Vue3 开发必备神器。
+
+-   新建一个.vue 文件，输入vbase 会提示生成的模版内容；
+-   输入vfor 快速生成v-for 指令模版；
+-   输入v3onmounted 快速生成onMounted 生命周期函数；
+
+## 配置 tsconfig
+
+### 文件 tsconfig.json
+
+> 安装 types/node
+> npm i @types/node -D
+> // @types/node 就是Node.js的类型提示模块，安装之后TS就可以识别Node.js中的API和数据类型了。然后我们需要创建一个 tsconfig.json 文件，用来告诉TS如何编译我们的代码
+
+```
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/vite-env.d.tsd.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+
+```
+
+### 文件 tsconfig.node.json
+
+```
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": ["vite.config.ts", "src/vite-env.d.ts"]
+}
+
+```
+
+### 文件 src下创建 vite-env.d.ts
+
+```
+/// <reference types="vite/client" />
+interface ImportMetaEnv {
+	readonly VITE_ENV: string;
+	readonly VITE_APP_TITLE: string;
+	readonly VITE_APP_BASE_API: string;
+	readonly VITE_BUILD_SOURCEMAP: string;
+	readonly VITE_BUILD_DROP_CONSOLE: string;
+}
+
+interface ImportMeta {
+	readonly env: ImportMetaEnv;
+}
+
+```
+
+### 根目录下创建 .env.development
+
+```
+VITE_ENV = 'DEV'
+VITE_APP_TITLE = '测试title' // index.html中展示title显示
+VITE_BUILD_SOURCEMAP = 'false' // 打包是否生成sourcemap文件
+VITE_BUILD_DROP_CONSOLE = 'false' // 打包后是否去除掉 console.log
+VITE_APP_BASE_API=https://apiqlw.t.nxin.com
+```
+
+### 根目录下创建 .env.production
+
+```
+VITE_ENV = 'PROD'
+VITE_APP_TITLE = '测试title' // index.html中展示title显示
+VITE_BUILD_SOURCEMAP = 'true' // 打包是否生成sourcemap文件
+VITE_BUILD_DROP_CONSOLE = 'true' // 打包后是否去除掉 console.log
+VITE_APP_BASE_API=https://apiqlw.nxin.com
+```
+
+### 根目录下创建 .env.uat
+
+```
+VITE_ENV = 'UAT'
+VITE_APP_TITLE = '测试title' // index.html中展示title显示
+VITE_BUILD_SOURCEMAP = 'false' // 打包是否生成sourcemap文件
+VITE_BUILD_DROP_CONSOLE = 'false' // 打包后是否去除掉 console.log
+VITE_APP_BASE_API=https://apiqlw.t.nxin.com
+```
+
+### 配置 package.json
+
+```
+"dev": "vite --mode development",
+"prod": "vite --mode production",
+"build:dev": "vue-tsc && vite build --mode uat",
+"build": "vue-tsc && vite build --mode production",
+```
+
+### 定义process.env
+
+> 完整的vite.config.ts 如下
+
+```
+import { defineConfig, loadEnv } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import path from 'path';
+const resolve = (dir) => path.resolve(__dirname, dir);
+export default ({ mode }) => {
+	// 获取环境变量
+	const env: Partial<ImportMetaEnv> = loadEnv(mode, process.cwd());
+	console.log('envdev', env);
+	return defineConfig({
+		plugins: [
+			vue(),
+			// 默认会向 index.html 注入 .env 文件的内容，类似 vite 的 loadEnv函数
+			// 还可配置entry入口文件， inject自定义注入数据等
+			createHtmlPlugin(),
+		],
+		css: {
+			preprocessorOptions: {
+				less: {
+					javascriptEnabled: true,
+					additionalData: `@import "${resolve('src/assets/styles/index.less')}";`,
+				},
+			},
+		},
+		define: {
+			'process.env': env,
+		},
+		// 配置别名
+		resolve: {
+			alias: {
+				'@': resolve('src'),
+			},
+			// 导入时想要省略的扩展名列表
+			extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+		},
+		build: {
+			outDir: 'dist', // 指定打包路径，默认为项目根目录下的 dist 目录
+			sourcemap: env.VITE_BUILD_SOURCEMAP === 'true', // 是否产生sourcemap文件
+			// minify默认esbuild，esbuild模式下terserOptions将失效
+			// vite3变化：Terser 现在是一个可选依赖，如果你使用的是 build.minify: 'terser'，你需要手动安装它 `npm add -D terser`
+			minify: 'terser',
+			terserOptions: {
+				compress: {
+					keep_infinity: true, // 防止 Infinity 被压缩成 1/0，这可能会导致 Chrome 上的性能问题
+					drop_console: env.VITE_BUILD_DROP_CONSOLE === 'true', // 去除 console
+					drop_debugger: true, // 去除 debugger
+				},
+			},
+			chunkSizeWarningLimit: 1500, // chunk 大小警告的限制（以 kbs 为单位）
+		},
+	});
+};
+
+```
+
+### index.html 中通过vite-plugin-html加载 其他js,ts,vue文件中可使用import.meta.env获取环境变量
+
+> npm i vite-plugin-html -D
+
+```
+// vite.config.ts
+
+import { createHtmlPlugin } from 'vite-plugin-html';
+
+plugins: [
+  // 默认会向 index.html 注入 .env 文件的内容，类似 vite 的 loadEnv函数
+  // 还可配置entry入口文件， inject自定义注入数据等
+  createHtmlPlugin(),
+]
+```
+
+```
+<!-- index.html -->
+
+<title><%- VITE_APP_TITLE %></title>
+```
+
+## CSS 预处理器
+
+> npm i less -D
+> 创建src/styles文件夹 index.less 全局引入样式 在src/main.ts import '@/styles/index.less';
+> 创建 reset.css 格式化统一样式 详情见项目 在src/main.ts import '@/styles/reset.css
+> 全局使用自定义变量
+
+```
+// vite.config.ts
+
+css: {
+  preprocessorOptions: {
+    less: {
+      javascriptEnabled: true,
+      additionalData: `@import "${resolve(__dirname,'src/styles/index.less')}";`,
+    },
+  },
+},
+
+```

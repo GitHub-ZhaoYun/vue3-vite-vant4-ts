@@ -1,6 +1,6 @@
 module.exports = {
 	// 一行最多多少字符
-	printWidth: 80,
+	printWidth: 100,
 	// 使用4个空格缩进
 	tabWidth: 4,
 	// 使用tab缩进，不使用空格
@@ -28,8 +28,10 @@ module.exports = {
 	insertPragma: false,
 	// 使用默认的折行标准
 	proseWrap: 'always',
+	// vueIndentScriptAndStyle 设置为 true 时，Prettier 会对 <script> 和 <style> 标签内的代码进行缩进，这有助于提高代码的可读性1。希望这个答案对你有所帮助！
+	vueIndentScriptAndStyle: true,
 	// 根据显示样式决定html要不要折行
-	htmlWhitespaceSensitivity: 'css',
+	htmlWhitespaceSensitivity: 'css', // strict
 	// 换行符使用lf
 	endOfLine: 'lf',
 };
