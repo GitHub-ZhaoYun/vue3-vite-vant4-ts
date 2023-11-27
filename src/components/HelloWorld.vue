@@ -10,6 +10,7 @@
 <template>
 	<div class="card">
 		<van-button type="primary">主要按钮</van-button>
+    <van-button type="primary">主要按钮</van-button>
 		<van-cell title="单元格" value="内容" label="描述信息" />
 		<button type="button" @click="count++">count is {{ count }}</button>
 		<p>
