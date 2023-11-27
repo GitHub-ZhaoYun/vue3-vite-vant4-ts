@@ -33,5 +33,5 @@ module.exports = {
 	// 根据显示样式决定html要不要折行
 	htmlWhitespaceSensitivity: 'css', // strict
 	// 换行符使用lf
-	endOfLine: 'lf',
+	endOfLine: 'auto',
 };
