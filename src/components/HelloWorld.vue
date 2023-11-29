@@ -5,6 +5,7 @@
 	let process = import.meta.env.VITE_APP_BASE_API;
 	const count = ref(0);
 	count.value = 2;
+	count.value = 3;
 </script>
 
 <template>

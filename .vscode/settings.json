@@ -1,0 +1,11 @@
+{
+  // 保存时eslint自动修复错误
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  //保存自动格式化
+  "editor.formatOnSave": true,
+  //VS Code 将使用制表符·‘↹’进行缩进，而不是4个空格。
+  "editor.insertSpaces": false,
+  "editor.tabSize": 4
+}
