@@ -4,6 +4,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import path from 'path';
 import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from '@vant/auto-import-resolver';
+import postCssPxToRem from 'postcss-pxtorem';
 const resolve = (dir) => path.resolve(__dirname, dir);
 export default ({ mode }) => {
 	// 获取环境变量
@@ -25,6 +26,16 @@ export default ({ mode }) => {
 					javascriptEnabled: true,
 					additionalData: `@import "${resolve('src/assets/styles/index.less')}";`,
 				},
+			},
+			postcss: {
+				plugins: [
+					postCssPxToRem({
+						rootValue({ file }) {
+							return file.indexOf('vant') !== -1 ? 37.5 : 75;
+						},
+						propList: ['*'], // 需要转换的属性，这里选择全部都进行转换
+					}),
+				],
 			},
 		},
 		define: {

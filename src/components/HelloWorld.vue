@@ -23,6 +23,7 @@
 			{{ process }}
 			{{ process }}
 		</p>
+		<div class="font_class"></div>
 		<span></span>
 	</div>
 
@@ -40,8 +41,13 @@
 	<span>adaw</span>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 	.read-the-docs {
 		color: #888;
+	}
+	.font_class {
+		width: 30px;
+		height: 30px;
+		background-color: aquamarine;
 	}
 </style>

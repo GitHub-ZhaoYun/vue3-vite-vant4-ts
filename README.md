@@ -422,3 +422,31 @@ import { showImagePreview } from 'vant';
 import 'vant/es/image-preview/style';
 
 ```
+
+## rem
+
+```
+使用的插件是
+npm install amfe-flexible --save
+npm install postcss-pxtorem --save
+
+配置规则 详情见链接 https://blog.csdn.net/Julylyna/article/details/129498394
+import postCssPxToRem from "postcss-pxtorem";
+export default defineConfig({
+    plugins: [vue()],
+    css: {
+	    postcss: {
+	      	plugins: [
+	        	postCssPxToRem({
+	          		rootValue({ file }) {
+							return file.indexOf('vant') !== -1 ? 37.5 : 75;
+						}, // 1rem，vant之外的使用75 vant采用37.5
+	          		propList: ['*'], // 需要转换的属性，这里选择全部都进行转换
+	        	})
+	      	]
+	    }
+    },
+})
+
+
+```
