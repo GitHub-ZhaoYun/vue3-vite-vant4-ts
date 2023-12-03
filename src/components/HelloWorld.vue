@@ -10,6 +10,7 @@
 
 <template>
 	<div class="card">
+		<div>ahoefih</div>
 		<van-button type="primary">主要按钮</van-button>
 		<van-button type="primary">主要按钮</van-button>
 		<van-button type="primary">主要按钮</van-button>
