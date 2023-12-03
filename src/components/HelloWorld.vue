@@ -10,7 +10,7 @@
 
 <template>
 	<div class="card">
-		<div>测试的代码</div>
+		<div>测试的代码01</div>
 		<van-button type="primary">主要按钮</van-button>
 		<van-button type="primary">主要按钮</van-button>
 		<van-button type="primary">主要按钮</van-button>
