@@ -6,6 +6,14 @@
 	const count = ref(0);
 	count.value = 2;
 	count.value = 3;
+	const date = ref('');
+	const show = ref(false);
+
+	const formatDate = (date: Date) => `${date.getMonth() + 1}/${date.getDate()}`;
+	const onConfirm = (value: Date) => {
+		show.value = false;
+		date.value = formatDate(value);
+	};
 </script>
 
 <template>
@@ -17,28 +25,12 @@
 		<van-cell title="单元格" value="内容" label="描述信息" />
 		<button type="button" @click="count++">count is {{ count }}</button>
 		<p>
-			Edit 阿花送达
-			<code>components/HelloWorld.vue</code> to test HMR
-			<span>阿斯顿撒</span>
 			{{ process }}
 			{{ process }}
 		</p>
-		<div class="font_class"></div>
-		<span></span>
 	</div>
-
-	<p>
-		Check out
-		<a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">create-vue</a>, the
-		official Vue + Vite starter
-	</p>
-	<p>
-		Install
-		<a href="https://github.com/vuejs/language-tools" target="_blank">Volar</a>
-		in your IDE for a better DX
-	</p>
-	<p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
-	<span>adaw</span>
+	<van-cell title="选择单个日期" :value="date" @click="show = true" />
+	<van-calendar v-model:show="show" @confirm="onConfirm" />
 </template>
 
 <style scoped lang="less">
