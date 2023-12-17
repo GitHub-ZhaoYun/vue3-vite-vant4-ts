@@ -450,3 +450,83 @@ export default defineConfig({
 
 
 ```
+
+## 更换主题颜色
+
+新建主题颜色 less 文件 vant-theme.less
+
+```
+:root {
+  --van-primary-color: red;
+}
+```
+
+在 vite.config.ts 中应用这个文件
+
+> 注 此引用 还可以解决一个less文件在多个地方应用的 全局使用不用每个使用的地方单独饮用的问题
+
+```
+preprocessorOptions: {
+	less: {
+		javascriptEnabled: true,
+		additionalData: `@import "${resolve('src/assets/styles/index.less')}";`,
+	},
+},
+
+在通过设置不同的css样式 更改 主题色（通过不同的定义设置不同的样式 目前的能想到的）
+document.documentElement.style.setProperty('--van-primary-color', 'green');
+```
+
+还可以通过vant的组件的方式
+
+```
+<van-config-provider
+  :theme-vars="{ primaryColor: 'red' }"
+  theme-vars-scope="global"
+>
+  ...
+</van-config-provider>
+```
+
+## 自动导入API
+
+前面介绍了一个自动按需引入组件的插件 unplugin-auto-import ，秉着能少写一行代码就少写一行代码的精神，
+再介绍一个自动导入api的插件 unplugin-auto-import 😌
+
+```
+npm i unplugin-auto-import -D
+
+// vite.config.ts
+
+import AutoImport from 'unplugin-auto-import/vite';
+```
+
+```
+// vite.config.ts
+plugins: [
+  AutoImport({
+    imports: ['vue', 'vue-router'],
+    // 设置为在'src/'目录下生成解决ts报错，默认是当前目录('./'，即根目录)
+    dts: 'src/auto-import.d.ts',
+    // 自动生成'eslintrc-auto-import.json'文件，在'.eslintrc.cjs'的'extends'中引入解决报错
+    // 'vue-global-api'这个插件仅仅解决vue3 hook报错
+    eslintrc: {
+      enabled: true,
+    },
+  }),
+]
+```
+
+```
+// .eslintrc.cjs
+
+extends: [
+  // 解决使用自动导入api报错
+  './.eslintrc-auto-import.json',
+  // 单独解决使用vue api时报错
+  // 'vue-global-api',
+],
+```
+
+接下来就可以全局使用 vue、vue-router 相关 api，不用一个个手动导入了。哪些 api 可用请参考生成的
+src/auto-import.d.ts 类型声明文件。

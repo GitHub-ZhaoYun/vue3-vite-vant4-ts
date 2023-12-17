@@ -5,6 +5,7 @@ import path from 'path';
 import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from '@vant/auto-import-resolver';
 import postCssPxToRem from 'postcss-pxtorem';
+import AutoImport from 'unplugin-auto-import/vite';
 const resolve = (dir) => path.resolve(__dirname, dir);
 export default ({ mode }) => {
 	// 获取环境变量
@@ -12,6 +13,16 @@ export default ({ mode }) => {
 	console.log('envdev', env);
 	return defineConfig({
 		plugins: [
+			AutoImport({
+				imports: ['vue', 'vue-router'],
+				// 设置为在'src/'目录下生成解决ts报错，默认是当前目录('./'，即根目录)
+				dts: 'src/auto-import.d.ts',
+				// 自动生成'eslintrc-auto-import.json'文件，在'.eslintrc.cjs'的'extends'中引入解决报错
+				// 'vue-global-api'这个插件仅仅解决vue3 hook报错
+				eslintrc: {
+					enabled: true,
+				},
+			}),
 			vue(),
 			// 默认会向 index.html 注入 .env 文件的内容，类似 vite 的 loadEnv函数
 			// 还可配置entry入口文件， inject自定义注入数据等

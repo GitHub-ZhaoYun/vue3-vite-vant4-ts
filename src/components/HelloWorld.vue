@@ -1,6 +1,4 @@
 <script setup lang="ts">
-	import { ref } from 'vue';
-
 	defineProps<{ msg: string }>();
 	let process = import.meta.env.VITE_APP_BASE_API;
 	const count = ref(0);
@@ -13,6 +11,7 @@
 		show.value = false;
 		date.value = formatDate(value);
 	};
+	// /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
 </script>
 
 <template>

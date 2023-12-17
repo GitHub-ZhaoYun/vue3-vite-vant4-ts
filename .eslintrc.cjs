@@ -11,6 +11,7 @@ module.exports = {
 		'plugin:@typescript-eslint/recommended',
 		'plugin:prettier/recommended',
 		'prettier', // eslint-config-prettier 的缩写
+		'./.eslintrc-auto-import.json',
 	],
 	parser: 'vue-eslint-parser', // 指定要使用的解析器
 	// 给解析器传入一些其他的配置参数
